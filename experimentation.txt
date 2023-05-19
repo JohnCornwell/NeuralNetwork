@@ -1,0 +1,144 @@
+Testing related to image-20.dat:
+
+Test 1:
+java -cp "bin" NeuralNetDriver -f a03-data/image-20.dat -h 2 100 50 -a 0.1 -e 10000 -m 200 -l 0.00001 -r -v 3
+* Reading a03-data/image-20.dat
+* Doing train/validation split
+* Scaling features
+* min/max values on training set:
+/**Eliminating Feature output for brevity*//
+* Building network
+* Layer sizes (excluding bias neuron(s)):
+Layer  1 (input) : 440
+Layer  2 (hidden): 100
+Layer  3 (hidden):  50
+Layer  4 (output):  14
+* Training network (using 2008 examples)
+* Beginning mini-batch gradient descent
+(batchSize=200, epochLimit=10000, learningRate=0.1000, lambda=0.0000)
+Initial model with random weights : Cost = 3.710045; Loss = 3.708384; Acc = 0.0329
+After   1000 epochs ( 11000 iter.): Cost = 0.813663; Loss = 0.811283; Acc = 0.3187
+After   2000 epochs ( 22000 iter.): Cost = 0.628355; Loss = 0.622687; Acc = 0.5080
+After   3000 epochs ( 33000 iter.): Cost = 0.474158; Loss = 0.464121; Acc = 0.6579
+After   4000 epochs ( 44000 iter.): Cost = 0.414427; Loss = 0.400660; Acc = 0.6967
+After   5000 epochs ( 55000 iter.): Cost = 0.332606; Loss = 0.316630; Acc = 0.7600
+After   6000 epochs ( 66000 iter.): Cost = 0.299514; Loss = 0.281735; Acc = 0.7864
+After   7000 epochs ( 77000 iter.): Cost = 0.281636; Loss = 0.262277; Acc = 0.8083
+After   8000 epochs ( 88000 iter.): Cost = 0.294281; Loss = 0.273445; Acc = 0.8088
+After   9000 epochs ( 99000 iter.): Cost = 0.281386; Loss = 0.258920; Acc = 0.8132
+After  10000 epochs (110000 iter.): Cost = 0.266000; Loss = 0.241977; Acc = 0.8187
+* Done with fitting!
+Training took 3006881ms, 10000 epochs, 110000 iterations (27.3353ms / iteration)
+GD Stop condition: Epoch Limit
+* Evaluating accuracy
+TrainAcc:  0.818725
+ValidAcc:  0.260437
+
+This test took quite a while to finish. I was excited to see it progressively doing better on the 
+training set, but I was disappointed that it did not work well on out of sample data. This indicates to 
+me a potential overfitting of data.
+
+Test 2:
+Here I decided to use a much larger weight penalty, but scale down the network...
+
+java -cp "bin" NeuralNetDriver -f a03-data/image-20.dat -h 2 50 20 -a 0.1 -e 10000 -m 200 -l 0.001 -r -v 3
+//* Skipping setup output *//
+* Training network (using 2008 examples)
+* Beginning mini-batch gradient descent
+(batchSize=200, epochLimit=10000, learningRate=0.1000, lambda=0.0010)
+Initial model with random weights : Cost = 3.601375; Loss = 3.523372; Acc = 0.0334
+After   1000 epochs ( 11000 iter.): Cost = 0.909061; Loss = 0.898596; Acc = 0.2047
+After   2000 epochs ( 22000 iter.): Cost = 0.908397; Loss = 0.898927; Acc = 0.2047
+After   3000 epochs ( 33000 iter.): Cost = 0.908104; Loss = 0.898688; Acc = 0.2047
+After   4000 epochs ( 44000 iter.): Cost = 0.908219; Loss = 0.898773; Acc = 0.2047
+After   5000 epochs ( 55000 iter.): Cost = 0.908328; Loss = 0.898886; Acc = 0.2047
+After   6000 epochs ( 66000 iter.): Cost = 0.908044; Loss = 0.898603; Acc = 0.2047
+After   7000 epochs ( 77000 iter.): Cost = 0.908018; Loss = 0.898555; Acc = 0.2047
+After   8000 epochs ( 88000 iter.): Cost = 0.908080; Loss = 0.898614; Acc = 0.2047
+After   9000 epochs ( 99000 iter.): Cost = 0.908491; Loss = 0.899047; Acc = 0.2047
+After  10000 epochs (110000 iter.): Cost = 0.908183; Loss = 0.898722; Acc = 0.2047
+* Done with fitting!
+Training took 2127652ms, 10000 epochs, 110000 iterations (19.3423ms / iteration)
+GD Stop condition: Epoch Limit
+* Evaluating accuracy
+TrainAcc:  0.204681
+ValidAcc:  0.208748
+
+These results make me think that the learning rate is too high and the network is bouncing around a 
+minimum instead of settling in it. I am also going to set the weight penalty to 0 to reduce the number 
+of variables I need to deal with. I will also use a smaller batch size next time to increase the number 
+of weight updates per epoch. The good news is that we did better (slightly) on out of sample data. I also 
+remembered that I am supposed to reduce the starting weight range, so I will do that.
+
+Final Test:
+
+After several more tests, I was unable to get my validation accuracy up. I'm doing the smae test here 
+that I will run in the next section...
+java -cp "src" NeuralNetDriver -f a03-data/image-20.dat -h 2 200 100 -a 0.04 -e 3000 -w 0.001 -m 20 
+-l 0.00001 -r -v 3
+//* Skipping initialization setup *//
+* Training network (using 2008 examples)
+* Beginning mini-batch gradient descent
+(batchSize=20, epochLimit=3000, learningRate=0.0400, lambda=0.0000)
+Initial model with random weights : Cost = 3.500301; Loss = 3.500301; Acc = 0.0623
+After    300 epochs ( 30300 iter.): Cost = 0.896213; Loss = 0.896173; Acc = 0.2087
+After    600 epochs ( 60600 iter.): Cost = 0.896908; Loss = 0.896864; Acc = 0.2087
+After    900 epochs ( 90900 iter.): Cost = 0.896076; Loss = 0.896030; Acc = 0.2087
+After   1200 epochs (121200 iter.): Cost = 0.881531; Loss = 0.881351; Acc = 0.2156
+After   1500 epochs (151500 iter.): Cost = 0.849894; Loss = 0.849238; Acc = 0.2336
+After   1800 epochs (181800 iter.): Cost = 0.808527; Loss = 0.806956; Acc = 0.2674
+After   2100 epochs (212100 iter.): Cost = 0.758964; Loss = 0.756238; Acc = 0.3352
+After   2400 epochs (242400 iter.): Cost = 0.734975; Loss = 0.730973; Acc = 0.3725
+After   2700 epochs (272700 iter.): Cost = 0.649753; Loss = 0.643763; Acc = 0.4641
+After   3000 epochs (303000 iter.): Cost = 0.542778; Loss = 0.533842; Acc = 0.5513
+* Done with fitting!
+Training took 1764552ms, 3000 epochs, 303000 iterations (5.8236ms / iteration)
+GD Stop condition: Epoch Limit
+* Evaluating accuracy
+TrainAcc:  0.551295
+ValidAcc:  0.262425
+
+This leads me to believe I have some fundamental issue with the network parameters. I can't be overfitting 
+at this point, but I am consistently hitting a validation error in the mid 20%.
+
+
+
+
+
+
+
+
+Testing related to mnist.dat:
+
+Test 1:
+I used the same configuration as I did for my final testing on the image data, but greatly reduced the 
+epoch limit. The results I got from this test were very satisfying...
+
+java -cp "src" NeuralNetDriver -f a03-data/mnist.dat -h 2 200 100 -a 0.04 -e 3000 -w 0.001 -m 20 
+-l 0.00001 -r -v 3
+//* Skipping initialization output *//
+* Training network (using 4000 examples)
+* Beginning mini-batch gradient descent
+(batchSize=20, epochLimit=3000, learningRate=0.0400, lambda=0.0000)
+Initial model with random weights : Cost = 2.498683; Loss = 2.498683; Acc = 0.0930
+After    300 epochs ( 60000 iter.): Cost = 0.899418; Loss = 0.899395; Acc = 0.1155
+After    600 epochs (120000 iter.): Cost = 0.744969; Loss = 0.744448; Acc = 0.3080
+After    900 epochs (180000 iter.): Cost = 0.082277; Loss = 0.075807; Acc = 0.9610
+After   1200 epochs (240000 iter.): Cost = 0.035646; Loss = 0.026147; Acc = 0.9818
+After   1500 epochs (300000 iter.): Cost = 0.027445; Loss = 0.017015; Acc = 0.9870
+After   1800 epochs (360000 iter.): Cost = 0.024832; Loss = 0.014085; Acc = 0.9885
+After   2100 epochs (420000 iter.): Cost = 0.023547; Loss = 0.012758; Acc = 0.9895
+After   2400 epochs (480000 iter.): Cost = 0.022811; Loss = 0.012087; Acc = 0.9900
+After   2700 epochs (540000 iter.): Cost = 0.021572; Loss = 0.010910; Acc = 0.9910
+After   3000 epochs (600000 iter.): Cost = 0.021010; Loss = 0.010439; Acc = 0.9915
+* Done with fitting!
+Training took 5753310ms, 3000 epochs, 600000 iterations (9.5889ms / iteration)
+GD Stop condition: Epoch Limit
+* Evaluating accuracy
+TrainAcc:  0.991500
+ValidAcc:  0.955000
+
+I'm not sure how I would be able to do better than this, because I feel that I would start to overfit the 
+data. Much of my time and testing was done on the image data set, because it was a more challenging task. 
+I have only done one test here because I spent over a day trying to fit image-20.dat and because that 
+effort translated to great results here.
