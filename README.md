@@ -1,21 +1,17 @@
-Author: John Cornwell
-Date: 11/12/2022
-CS 557: Machine Learning
-
-Assignment 3
-
-Description:
+# Neural Network
 
 This program trains and evaluates a neural network for multi-class classification. 
 This program allows the user to specify the structure of a multi-layer feed-forward 
 neural network and then will train that network using backpropagation in conjunction 
 with mini-batch gradient descent.
 
-Usage:
+## Usage
 
 A user can run this program with the command:
 
+```bash
 java NeuaralNetDriver -f [TRAINING_FILE]
+```
 
 in the directory containing this program's class files. This program takes 
 one required and several optional command line arguments:
@@ -48,6 +44,13 @@ one required and several optional command line arguments:
 -v <INTEGER>: Specifies a verbosity level, indicating how much output the program should produce; 
 			  default is 1.
 
-Bugs and Unimplemented Functionality:
+## Bugs and Unimplemented Functionality
 
 None
+
+## Author
+John Cornwell
+
+Date: 11/12/2022
+
+CS 557: Machine Learning
